@@ -177,3 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 ```
+
+## License
+
+    MIT License
