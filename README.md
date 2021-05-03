@@ -7,8 +7,8 @@ Avoid accidental clicks or dialogs to prevent them using SwipeButton.
 
 ## Screenshot
 
-|              Example 1          |              Example 2         |              Example 3          |
-| :-----------------------------: | :----------------------------: | :-----------------------------: |
+|              Example 1          |              Example 2          |              Example 3          |
+| :-----------------------------: | :----------------------------:  | :-----------------------------: |
 | ![](screenshots/flutter_01.png) | ![](screenshots/flutter_02.png) | ![](screenshots/flutter_03.png) |
 
 ## Getting Started
