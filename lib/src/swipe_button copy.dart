@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 const double _defaultHeight = 50;
 const double _defaultPadding = 6;
-const double _velocity = 1.1;
 
 class SwipeButton extends StatefulWidget {
   final Widget child;
@@ -15,7 +14,6 @@ class SwipeButton extends StatefulWidget {
   final double? innerPadding;
   final double? height;
   final bool disabled;
-  final double elevation;
   final Function()? onSwipe;
 
   const SwipeButton({
@@ -28,10 +26,8 @@ class SwipeButton extends StatefulWidget {
     this.backgroundColor,
     this.height,
     this.disabled = false,
-    this.elevation = 0,
     this.onSwipe,
-  })  : assert(elevation >= 0.0),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _SwipeState createState() => _SwipeState();
@@ -45,7 +41,6 @@ class _SwipeState extends State<SwipeButton> {
   Widget build(BuildContext context) {
     return Material(
       borderRadius: widget.borderRadius ?? BorderRadius.circular(150),
-      elevation: widget.elevation,
       clipBehavior: Clip.antiAlias,
       child: Container(
         width: double.infinity,
@@ -53,7 +48,7 @@ class _SwipeState extends State<SwipeButton> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return Opacity(
-              opacity: widget.disabled ? 0.2 : 1,
+              opacity: widget.disabled ? 0.3 : 1,
               child: Container(
                 padding: EdgeInsets.all(widget.innerPadding ?? _defaultPadding),
                 width: constraints.maxWidth,
@@ -84,7 +79,7 @@ class _SwipeState extends State<SwipeButton> {
                               !widget.disabled) {
                             setState(() {
                               double dx = min(
-                                _offset.dx + details.delta.dx * _velocity,
+                                _offset.dx + details.delta.dx,
                                 constraints.maxWidth -
                                     (widget.height ?? _defaultHeight),
                               );

@@ -7,6 +7,7 @@ Avoid accidental clicks or dialogs to prevent them using SwipeButton.
 
 ## Screenshot
 
+|              Example 1          |              Example 2         |              Example 3          |
 | :-----------------------------: | :----------------------------: | :-----------------------------: |
 | ![](screenshots/flutter_01.png) | ![](screenshots/flutter_02.png) | ![](screenshots/flutter_03.png) |
 
@@ -15,7 +16,7 @@ Avoid accidental clicks or dialogs to prevent them using SwipeButton.
 ### Adding package
 
 ```yaml
-flutter_swipe_button: ^1.0.0
+flutter_swipe_button: ^1.0.1
 ```
 
 ### Importing package
