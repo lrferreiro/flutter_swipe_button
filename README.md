@@ -16,7 +16,7 @@ Avoid accidental clicks or dialogs to prevent them using SwipeButton.
 ### Adding package
 
 ```yaml
-flutter_swipe_button: ^1.0.1
+flutter_swipe_button: ^1.0.2
 ```
 
 ### Importing package
