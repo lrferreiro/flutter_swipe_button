@@ -16,7 +16,9 @@ class SwipeButton extends StatefulWidget {
   final double? height;
   final bool disabled;
   final double elevation;
+  final Function()? onSwipeStart;
   final Function()? onSwipe;
+  final Function()? onSwipeEnd;
 
   const SwipeButton({
     Key? key,
@@ -29,7 +31,9 @@ class SwipeButton extends StatefulWidget {
     this.height,
     this.disabled = false,
     this.elevation = 0,
+    this.onSwipeStart,
     this.onSwipe,
+    this.onSwipeEnd,
   })  : assert(elevation >= 0.0),
         super(key: key);
 
@@ -77,6 +81,7 @@ class _SwipeState extends State<SwipeButton> {
                           setState(() {
                             _swiped = false;
                           });
+                          widget.onSwipeStart?.call();
                         },
                         onHorizontalDragUpdate: (details) {
                           if (_offset.dx + details.delta.dx > 0 &&
@@ -104,6 +109,7 @@ class _SwipeState extends State<SwipeButton> {
                           setState(() {
                             _offset = Offset.zero;
                           });
+                          widget.onSwipeEnd?.call();
                         },
                         child: Container(
                           width: (widget.height ?? _defaultHeight) -
