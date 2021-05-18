@@ -1,3 +1,7 @@
+## [1.1.0] - 18-05-2021
+
+* Added `expand`  constructor and other properties
+
 ## [1.0.2] - 17-05-2021
 
 * Added events onSwipeStart and onSwipeEnd.

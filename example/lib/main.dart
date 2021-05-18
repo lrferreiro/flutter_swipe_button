@@ -42,7 +42,37 @@ class _MyHomePageState extends State<MyHomePage> {
                 horizontal: 30,
                 vertical: 8,
               ),
+              child: SwipeButton.expand(
+                thumb: Icon(
+                  Icons.double_arrow_rounded,
+                  color: Colors.white,
+                ),
+                child: Text(
+                  "Swipe to ...",
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                activeThumbColor: Colors.red,
+                activeTrackColor: Colors.grey.shade300,
+                onSwipe: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Swipped"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 8,
+              ),
               child: SwipeButton(
+                trackPadding: EdgeInsets.all(6),
+                elevation: 2,
                 child: Text(
                   "Swipe to ...",
                   style: TextStyle(
@@ -65,10 +95,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 vertical: 8,
               ),
               child: SwipeButton(
-                icon: Icon(
+                thumbPadding: EdgeInsets.all(3),
+                thumb: Icon(
                   Icons.chevron_right,
-                  color: Colors.blue,
+                  color: Colors.white,
                 ),
+                elevation: 2,
                 child: Text(
                   "Swipe to ...".toUpperCase(),
                   style: TextStyle(
@@ -94,8 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: SwipeButton(
                 borderRadius: BorderRadius.circular(8),
-                backgroundColor: Colors.amber,
-                innerPadding: 10,
+                activeTrackColor: Colors.amber,
                 height: 60,
                 child: Text(
                   "Swipe to ...",
@@ -119,10 +150,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 vertical: 8,
               ),
               child: SwipeButton(
-                backgroundColor: Colors.blue,
-                color: Colors.yellow,
+                activeTrackColor: Colors.blue,
+                activeThumbColor: Colors.yellow,
                 borderRadius: BorderRadius.zero,
-                innerPadding: 2,
                 height: 30,
                 child: Text(
                   "Swipe to ...",
@@ -139,7 +169,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
               ),
-            )
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 8,
+              ),
+              child: SwipeButton(
+                width: 200,
+                child: Text(
+                  "Swipe to ...",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onSwipe: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Swipped"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

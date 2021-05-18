@@ -16,7 +16,7 @@ Avoid accidental clicks or dialogs to prevent them using SwipeButton.
 ### Adding package
 
 ```yaml
-flutter_swipe_button: ^1.0.2
+flutter_swipe_button: ^1.1.0
 ```
 
 ### Importing package
@@ -25,157 +25,149 @@ flutter_swipe_button: ^1.0.2
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 ```
 
-## Example
+## How to use
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_swipe_button/flutter_swipe_button.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 8,
-              ),
-              child: SwipeButton(
-                child: Text(
-                  "Swipe to ...",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onSwipe: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Swipped"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 8,
-              ),
-              child: SwipeButton(
-                icon: Icon(
-                  Icons.chevron_right,
-                  color: Colors.blue,
-                ),
-                child: Text(
-                  "Swipe to ...".toUpperCase(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onSwipe: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Swipped"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 8,
-              ),
-              child: SwipeButton(
-                borderRadius: BorderRadius.circular(8),
-                backgroundColor: Colors.amber,
-                innerPadding: 10,
-                height: 60,
-                child: Text(
-                  "Swipe to ...",
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                onSwipe: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Swipped"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 30,
-                vertical: 8,
-              ),
-              child: SwipeButton(
-                backgroundColor: Colors.blue,
-                color: Colors.yellow,
-                borderRadius: BorderRadius.zero,
-                innerPadding: 2,
-                height: 30,
-                child: Text(
-                  "Swipe to ...",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onSwipe: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Swipped"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
+SwipeButton.expand(
+  thumb: Icon(
+    Icons.double_arrow_rounded,
+    color: Colors.white,
+  ),
+  child: Text(
+    "Swipe to ...",
+    style: TextStyle(
+      color: Colors.red,
+    ),
+  ),
+  activeThumbColor: Colors.red,
+  activeTrackColor: Colors.grey.shade300,
+  onSwipe: () {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Swipped"),
+        backgroundColor: Colors.green,
       ),
     );
-  }
-}
+  },
+)
+
+```
+
+```dart
+SwipeButton(
+  trackPadding: EdgeInsets.all(6),
+  elevation: 2,
+  child: Text(
+    "Swipe to ...",
+    style: TextStyle(
+      color: Colors.white,
+    ),
+  ),
+  onSwipe: () {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Swipped"),
+        backgroundColor: Colors.green,
+      ),
+    );
+  },
+)
+
+```
+
+```dart
+SwipeButton(
+  thumbPadding: EdgeInsets.all(3),
+  thumb: Icon(
+    Icons.chevron_right,
+    color: Colors.white,
+  ),
+  elevation: 2,
+  child: Text(
+    "Swipe to ...".toUpperCase(),
+    style: TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  onSwipe: () {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Swipped"),
+        backgroundColor: Colors.green,
+      ),
+    );
+  },
+)
+
+```
+
+```dart
+SwipeButton(
+  borderRadius: BorderRadius.circular(8),
+  activeTrackColor: Colors.amber,
+  height: 60,
+  child: Text(
+    "Swipe to ...",
+    style: TextStyle(
+      color: Colors.red,
+    ),
+  ),
+  onSwipe: () {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Swipped"),
+        backgroundColor: Colors.green,
+      ),
+    );
+  },
+)
+
+```
+
+```dart
+SwipeButton(
+  activeTrackColor: Colors.blue,
+  activeThumbColor: Colors.yellow,
+  borderRadius: BorderRadius.zero,
+  height: 30,
+  child: Text(
+    "Swipe to ...",
+    style: TextStyle(
+      color: Colors.white,
+    ),
+  ),
+  onSwipe: () {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Swipped"),
+        backgroundColor: Colors.green,
+      ),
+    );
+  },
+)
+
+```
+
+```dart
+SwipeButton(
+  width: 200,
+  child: Text(
+    "Swipe to ...",
+    style: TextStyle(
+      color: Colors.white,
+    ),
+  ),
+  onSwipe: () {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Swipped"),
+        backgroundColor: Colors.green,
+      ),
+    );
+  },
+)
 
 ```
 
