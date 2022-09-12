@@ -1,11 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 const double _velocity = 1.1;
 
-enum _SwipeButtonType { Swipe, Expand }
+enum _SwipeButtonType {
+  swipe,
+  expand,
+}
 
 class SwipeButton extends StatefulWidget {
   final Widget child;
@@ -26,7 +28,8 @@ class SwipeButton extends StatefulWidget {
 
   final bool enabled;
 
-  final double elevation;
+  final double elevationThumb;
+  final double elevationTrack;
 
   final Function()? onSwipeStart;
   final Function()? onSwipe;
@@ -48,12 +51,14 @@ class SwipeButton extends StatefulWidget {
     this.width = double.infinity,
     this.height = 50,
     this.enabled = true,
-    this.elevation = 0,
+    this.elevationThumb = 0,
+    this.elevationTrack = 0,
     this.onSwipeStart,
     this.onSwipe,
     this.onSwipeEnd,
-  })  : assert(elevation >= 0.0),
-        _swipeButtonType = _SwipeButtonType.Swipe,
+  })  : assert(elevationThumb >= 0.0),
+        assert(elevationTrack >= 0.0),
+        _swipeButtonType = _SwipeButtonType.swipe,
         super(key: key);
 
   const SwipeButton.expand({
@@ -70,16 +75,18 @@ class SwipeButton extends StatefulWidget {
     this.width = double.infinity,
     this.height = 50,
     this.enabled = true,
-    this.elevation = 0,
+    this.elevationThumb = 0,
+    this.elevationTrack = 0,
     this.onSwipeStart,
     this.onSwipe,
     this.onSwipeEnd,
-  })  : assert(elevation >= 0.0),
-        _swipeButtonType = _SwipeButtonType.Expand,
+  })  : assert(elevationThumb >= 0.0),
+        assert(elevationTrack >= 0.0),
+        _swipeButtonType = _SwipeButtonType.expand,
         super(key: key);
 
   @override
-  _SwipeState createState() => _SwipeState();
+  State<SwipeButton> createState() => _SwipeState();
 }
 
 class _SwipeState extends State<SwipeButton> {
@@ -95,7 +102,7 @@ class _SwipeState extends State<SwipeButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widget.width,
       height: widget.height,
       child: LayoutBuilder(
@@ -120,19 +127,25 @@ class _SwipeState extends State<SwipeButton> {
         : widget.inactiveTrackColor ?? theme.disabledColor;
 
     final borderRadius = widget.borderRadius ?? BorderRadius.circular(150);
+    final elevationTrack = widget.enabled ? widget.elevationTrack : 0.0;
 
-    return Container(
+    return Padding(
       padding: widget.trackPadding,
-      child: Container(
-        width: constraints.maxWidth,
-        height: widget.height,
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          color: trackColor,
-        ),
+      child: Material(
+        elevation: elevationTrack,
+        borderRadius: borderRadius,
         clipBehavior: Clip.antiAlias,
-        alignment: Alignment.center,
-        child: widget.child,
+        child: Container(
+          width: constraints.maxWidth,
+          height: widget.height,
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            color: trackColor,
+          ),
+          clipBehavior: Clip.antiAlias,
+          alignment: Alignment.center,
+          child: widget.child,
+        ),
       ),
     );
   }
@@ -141,12 +154,12 @@ class _SwipeState extends State<SwipeButton> {
     final ThemeData theme = Theme.of(context);
 
     final thumbColor = widget.enabled
-        ? widget.activeThumbColor ?? theme.accentColor
+        ? widget.activeThumbColor ?? theme.colorScheme.secondary
         : widget.inactiveThumbColor ?? theme.disabledColor;
 
     final borderRadius = widget.borderRadius ?? BorderRadius.circular(150);
 
-    final elevation = widget.enabled ? widget.elevation : 0.0;
+    final elevationThumb = widget.enabled ? widget.elevationThumb : 0.0;
 
     return Positioned(
       left: _offset.dx,
@@ -159,11 +172,11 @@ class _SwipeState extends State<SwipeButton> {
               _onHorizontalDragUpdate(details, constraints.maxWidth),
           onHorizontalDragEnd: _onHorizontalDragEnd,
           child: Material(
-            elevation: elevation,
+            elevation: elevationThumb,
             borderRadius: borderRadius,
             color: thumbColor,
             clipBehavior: Clip.antiAlias,
-            child: Container(
+            child: SizedBox(
               width:
                   max(widget.height, _width) - widget.thumbPadding.horizontal,
               height: widget.height - widget.thumbPadding.vertical,
@@ -188,7 +201,7 @@ class _SwipeState extends State<SwipeButton> {
 
   _onHorizontalDragUpdate(DragUpdateDetails details, double width) {
     switch (widget._swipeButtonType) {
-      case _SwipeButtonType.Swipe:
+      case _SwipeButtonType.swipe:
         if (_offset.dx + details.delta.dx > 0 && !_swiped && widget.enabled) {
           setState(() {
             double dx = min(
@@ -204,7 +217,7 @@ class _SwipeState extends State<SwipeButton> {
           });
         }
         break;
-      case _SwipeButtonType.Expand:
+      case _SwipeButtonType.expand:
         if (_width + details.delta.dx > 0 && !_swiped && widget.enabled) {
           setState(() {
             _width = _width + details.delta.dx * _velocity;

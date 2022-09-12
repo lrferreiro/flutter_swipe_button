@@ -16,7 +16,7 @@ Avoid accidental clicks or dialogs to prevent them using SwipeButton.
 ### Adding package
 
 ```yaml
-flutter_swipe_button: ^1.1.0
+flutter_swipe_button: ^2.0.0
 ```
 
 ### Importing package
@@ -56,7 +56,7 @@ SwipeButton.expand(
 ```dart
 SwipeButton(
   trackPadding: EdgeInsets.all(6),
-  elevation: 2,
+  elevationThumb: 2,
   child: Text(
     "Swipe to ...",
     style: TextStyle(
@@ -82,7 +82,8 @@ SwipeButton(
     Icons.chevron_right,
     color: Colors.white,
   ),
-  elevation: 2,
+  elevationThumb: 2,
+  elevationTrack: 2,
   child: Text(
     "Swipe to ...".toUpperCase(),
     style: TextStyle(
@@ -173,4 +174,4 @@ SwipeButton(
 
 ## License
 
-    MIT License
+  MIT License

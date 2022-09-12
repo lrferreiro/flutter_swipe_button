@@ -1,16 +1,22 @@
-## [1.1.0] - 18-05-2021
+## 2.0.0
 
-* Added `expand`  constructor and other properties
+- Migrated to Flutter 3
+- Changed property `elevation` to `elevationThumb`
+- Added property `elevationTrack`
 
-## [1.0.2] - 17-05-2021
+## 1.1.0
 
-* Added events onSwipeStart and onSwipeEnd.
+- Added `expand`  constructor and other properties
 
-## [1.0.1] - 03-05-2021
+## 1.0.2
 
-* Added elevation and disabled attributes.
-* Fixed errors.
+- Added events onSwipeStart and onSwipeEnd.
 
-## [1.0.0] - 02-05-2021
+## 1.0.1
 
-* First version.
+- Added elevation and disabled attributes.
+- Fixed errors.
+
+## 1.0.0
+
+- First version.
