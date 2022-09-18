@@ -135,6 +135,7 @@ class _SwipeState extends State<SwipeButton> {
         elevation: elevationTrack,
         borderRadius: borderRadius,
         clipBehavior: Clip.antiAlias,
+        color: Colors.transparent,
         child: Container(
           width: constraints.maxWidth,
           height: widget.height,
