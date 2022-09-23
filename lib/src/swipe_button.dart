@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-
-const double _velocity = 1.1;
 
 enum _SwipeButtonType {
   swipe,
@@ -31,11 +27,13 @@ class SwipeButton extends StatefulWidget {
   final double elevationThumb;
   final double elevationTrack;
 
-  final Function()? onSwipeStart;
-  final Function()? onSwipe;
-  final Function()? onSwipeEnd;
+  final VoidCallback? onSwipeStart;
+  final VoidCallback? onSwipe;
+  final VoidCallback? onSwipeEnd;
 
   final _SwipeButtonType _swipeButtonType;
+
+  final Duration duration;
 
   const SwipeButton({
     Key? key,
@@ -56,6 +54,7 @@ class SwipeButton extends StatefulWidget {
     this.onSwipeStart,
     this.onSwipe,
     this.onSwipeEnd,
+    this.duration = const Duration(milliseconds: 250),
   })  : assert(elevationThumb >= 0.0),
         assert(elevationTrack >= 0.0),
         _swipeButtonType = _SwipeButtonType.swipe,
@@ -80,6 +79,7 @@ class SwipeButton extends StatefulWidget {
     this.onSwipeStart,
     this.onSwipe,
     this.onSwipeEnd,
+    this.duration = const Duration(milliseconds: 250),
   })  : assert(elevationThumb >= 0.0),
         assert(elevationTrack >= 0.0),
         _swipeButtonType = _SwipeButtonType.expand,
@@ -89,15 +89,41 @@ class SwipeButton extends StatefulWidget {
   State<SwipeButton> createState() => _SwipeState();
 }
 
-class _SwipeState extends State<SwipeButton> {
-  Offset _offset = Offset.zero;
-  double _width = 0;
+class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
+  late AnimationController swipeAnimationController;
+  late AnimationController expandAnimationController;
 
-  bool _swiped = false;
+  bool swiped = false;
 
   @override
   void initState() {
+    _initAnimationControllers();
     super.initState();
+  }
+
+  _initAnimationControllers() {
+    swipeAnimationController = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+      lowerBound: 0,
+      upperBound: 1,
+      value: 0,
+    );
+    expandAnimationController = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+      lowerBound: 0,
+      upperBound: 1,
+      value: 0,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant SwipeButton oldWidget) {
+    if (oldWidget.duration != widget.duration) {
+      _initAnimationControllers();
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -135,12 +161,12 @@ class _SwipeState extends State<SwipeButton> {
         elevation: elevationTrack,
         borderRadius: borderRadius,
         clipBehavior: Clip.antiAlias,
+        color: trackColor,
         child: Container(
           width: constraints.maxWidth,
           height: widget.height,
           decoration: BoxDecoration(
             borderRadius: borderRadius,
-            color: trackColor,
           ),
           clipBehavior: Clip.antiAlias,
           alignment: Alignment.center,
@@ -161,40 +187,54 @@ class _SwipeState extends State<SwipeButton> {
 
     final elevationThumb = widget.enabled ? widget.elevationThumb : 0.0;
 
-    return Positioned(
-      left: _offset.dx,
-      top: _offset.dy,
-      child: Container(
-        padding: widget.thumbPadding,
-        child: GestureDetector(
-          onHorizontalDragStart: _onHorizontalDragStart,
-          onHorizontalDragUpdate: (details) =>
-              _onHorizontalDragUpdate(details, constraints.maxWidth),
-          onHorizontalDragEnd: _onHorizontalDragEnd,
-          child: Material(
-            elevation: elevationThumb,
-            borderRadius: borderRadius,
-            color: thumbColor,
-            clipBehavior: Clip.antiAlias,
-            child: SizedBox(
-              width:
-                  max(widget.height, _width) - widget.thumbPadding.horizontal,
-              height: widget.height - widget.thumbPadding.vertical,
-              child: widget.thumb ??
-                  Icon(
-                    Icons.arrow_forward,
-                    color: widget.activeTrackColor ?? widget.inactiveTrackColor,
-                  ),
+    return AnimatedBuilder(
+      animation: swipeAnimationController,
+      builder: (context, child) {
+        return Transform(
+          transform: Matrix4.identity()
+            ..translate(swipeAnimationController.value *
+                (constraints.maxWidth - widget.height)),
+          child: Container(
+            padding: widget.thumbPadding,
+            child: GestureDetector(
+              onHorizontalDragStart: _onHorizontalDragStart,
+              onHorizontalDragUpdate: (details) =>
+                  _onHorizontalDragUpdate(details, constraints.maxWidth),
+              onHorizontalDragEnd: _onHorizontalDragEnd,
+              child: Material(
+                elevation: elevationThumb,
+                borderRadius: borderRadius,
+                color: thumbColor,
+                clipBehavior: Clip.antiAlias,
+                child: AnimatedBuilder(
+                  animation: expandAnimationController,
+                  builder: (context, child) {
+                    return SizedBox(
+                      width: widget.height +
+                          (expandAnimationController.value *
+                              (constraints.maxWidth - widget.height)) -
+                          widget.thumbPadding.horizontal,
+                      height: widget.height - widget.thumbPadding.vertical,
+                      child: widget.thumb ??
+                          Icon(
+                            Icons.arrow_forward,
+                            color: widget.activeTrackColor ??
+                                widget.inactiveTrackColor,
+                          ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   _onHorizontalDragStart(DragStartDetails details) {
     setState(() {
-      _swiped = false;
+      swiped = false;
     });
     widget.onSwipeStart?.call();
   }
@@ -202,31 +242,27 @@ class _SwipeState extends State<SwipeButton> {
   _onHorizontalDragUpdate(DragUpdateDetails details, double width) {
     switch (widget._swipeButtonType) {
       case _SwipeButtonType.swipe:
-        if (_offset.dx + details.delta.dx > 0 && !_swiped && widget.enabled) {
-          setState(() {
-            double dx = min(
-              _offset.dx + details.delta.dx * _velocity,
-              width - widget.height,
-            );
-            _offset = Offset(dx, 0);
-
-            if (_offset.dx == width - widget.height && !_swiped) {
-              _swiped = true;
+        if (!swiped) {
+          swipeAnimationController.value +=
+              details.primaryDelta! / (width - widget.height);
+          if (swipeAnimationController.value == 1) {
+            setState(() {
+              swiped = true;
               widget.onSwipe?.call();
-            }
-          });
+            });
+          }
         }
         break;
       case _SwipeButtonType.expand:
-        if (_width + details.delta.dx > 0 && !_swiped && widget.enabled) {
-          setState(() {
-            _width = _width + details.delta.dx * _velocity;
-
-            if (_width >= width - widget.trackPadding.horizontal && !_swiped) {
-              _swiped = true;
+        if (!swiped) {
+          expandAnimationController.value +=
+              details.primaryDelta! / (width - widget.height);
+          if (expandAnimationController.value == 1) {
+            setState(() {
+              swiped = true;
               widget.onSwipe?.call();
-            }
-          });
+            });
+          }
         }
         break;
     }
@@ -234,8 +270,8 @@ class _SwipeState extends State<SwipeButton> {
 
   _onHorizontalDragEnd(DragEndDetails details) {
     setState(() {
-      _offset = Offset.zero;
-      _width = 0;
+      swipeAnimationController.animateTo(0);
+      expandAnimationController.animateTo(0);
     });
     widget.onSwipeEnd?.call();
   }

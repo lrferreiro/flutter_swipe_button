@@ -1,3 +1,9 @@
+## 2.1.0
+
+- Added AnimationController to the transitions
+- Added property `duration` to AnimationController
+- Fixed errors
+
 ## 2.0.0
 
 - Migrated to Flutter 3

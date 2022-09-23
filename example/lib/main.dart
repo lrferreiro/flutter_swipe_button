@@ -73,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 vertical: 8,
               ),
               child: SwipeButton.expand(
+                duration: const Duration(milliseconds: 200),
                 thumb: const Icon(
                   Icons.double_arrow_rounded,
                   color: Colors.white,
