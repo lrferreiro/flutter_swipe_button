@@ -127,6 +127,13 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    swipeAnimationController.dispose();
+    expandAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
