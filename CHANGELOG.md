@@ -1,3 +1,7 @@
+## 2.1.1+1
+
+- Fixed errors
+
 ## 2.1.1
 
 - Fixed errors

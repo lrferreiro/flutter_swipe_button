@@ -249,7 +249,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
   _onHorizontalDragUpdate(DragUpdateDetails details, double width) {
     switch (widget._swipeButtonType) {
       case _SwipeButtonType.swipe:
-        if (!swiped) {
+        if (!swiped && widget.enabled) {
           swipeAnimationController.value +=
               details.primaryDelta! / (width - widget.height);
           if (swipeAnimationController.value == 1) {
@@ -261,7 +261,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
         }
         break;
       case _SwipeButtonType.expand:
-        if (!swiped) {
+        if (!swiped && widget.enabled) {
           expandAnimationController.value +=
               details.primaryDelta! / (width - widget.height);
           if (expandAnimationController.value == 1) {
