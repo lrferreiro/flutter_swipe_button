@@ -1,3 +1,7 @@
+## 2.1.3
+
+- Fixed animation
+
 ## 2.1.2
 
 - Fixed issues #5 and #6

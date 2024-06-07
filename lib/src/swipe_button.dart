@@ -192,12 +192,16 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
 
     final elevationThumb = widget.enabled ? widget.elevationThumb : 0.0;
 
+    final TextDirection currentDirection = Directionality.of(context);
+    final bool isRTL = currentDirection == TextDirection.rtl;
+
     return AnimatedBuilder(
       animation: swipeAnimationController,
       builder: (context, child) {
         return Transform(
           transform: Matrix4.identity()
-            ..translate(swipeAnimationController.value *
+            ..translate((isRTL ? -1 : 1) *
+                swipeAnimationController.value *
                 (constraints.maxWidth - widget.height)),
           child: Container(
             padding: widget.thumbPadding,
