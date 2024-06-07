@@ -36,7 +36,7 @@ class SwipeButton extends StatefulWidget {
   final Duration duration;
 
   const SwipeButton({
-    Key? key,
+    super.key,
     required this.child,
     this.thumb,
     this.activeThumbColor,
@@ -57,11 +57,10 @@ class SwipeButton extends StatefulWidget {
     this.duration = const Duration(milliseconds: 250),
   })  : assert(elevationThumb >= 0.0),
         assert(elevationTrack >= 0.0),
-        _swipeButtonType = _SwipeButtonType.swipe,
-        super(key: key);
+        _swipeButtonType = _SwipeButtonType.swipe;
 
   const SwipeButton.expand({
-    Key? key,
+    super.key,
     required this.child,
     this.thumb,
     this.activeThumbColor,
@@ -82,8 +81,7 @@ class SwipeButton extends StatefulWidget {
     this.duration = const Duration(milliseconds: 250),
   })  : assert(elevationThumb >= 0.0),
         assert(elevationTrack >= 0.0),
-        _swipeButtonType = _SwipeButtonType.expand,
-        super(key: key);
+        _swipeButtonType = _SwipeButtonType.expand;
 
   @override
   State<SwipeButton> createState() => _SwipeState();
@@ -156,7 +154,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
     final ThemeData theme = Theme.of(context);
 
     final trackColor = widget.enabled
-        ? widget.activeTrackColor ?? theme.backgroundColor
+        ? widget.activeTrackColor ?? theme.colorScheme.surface
         : widget.inactiveTrackColor ?? theme.disabledColor;
 
     final borderRadius = widget.borderRadius ?? BorderRadius.circular(150);
@@ -247,11 +245,19 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
   }
 
   _onHorizontalDragUpdate(DragUpdateDetails details, double width) {
+    final TextDirection currentDirection = Directionality.of(context);
+    final bool isRTL = currentDirection == TextDirection.rtl;
+    final double offset = details.primaryDelta! / (width - widget.height);
+
     switch (widget._swipeButtonType) {
       case _SwipeButtonType.swipe:
         if (!swiped && widget.enabled) {
-          swipeAnimationController.value +=
-              details.primaryDelta! / (width - widget.height);
+          if (isRTL) {
+            swipeAnimationController.value -= offset;
+          } else {
+            swipeAnimationController.value += offset;
+          }
+
           if (swipeAnimationController.value == 1) {
             setState(() {
               swiped = true;
@@ -262,8 +268,11 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
         break;
       case _SwipeButtonType.expand:
         if (!swiped && widget.enabled) {
-          expandAnimationController.value +=
-              details.primaryDelta! / (width - widget.height);
+          if (isRTL) {
+            expandAnimationController.value -= offset;
+          } else {
+            expandAnimationController.value += offset;
+          }
           if (expandAnimationController.value == 1) {
             setState(() {
               swiped = true;

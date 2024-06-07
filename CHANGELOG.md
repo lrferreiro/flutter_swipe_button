@@ -1,3 +1,7 @@
+## 2.1.2
+
+- Fixed issues #5 and #6
+
 ## 2.1.1+1
 
 - Fixed errors

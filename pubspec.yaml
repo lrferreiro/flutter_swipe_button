@@ -1,10 +1,10 @@
 name: flutter_swipe_button
 description: Avoid accidental clicks or dialogs to prevent them using SwipeButton.
-version: 2.1.1+1
+version: 2.1.2
 homepage: https://github.com/lrferreiro/flutter_swipe_button
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.4.1 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -14,7 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
