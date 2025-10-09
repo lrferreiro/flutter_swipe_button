@@ -148,7 +148,12 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
             clipBehavior: Clip.none,
             children: [
               _buildTrack(context, constraints),
-              _buildThumb(context, constraints),
+              Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: widget.connected ? 0 : null,
+                  left: widget.connected ? null : 0,
+                  child: _buildThumb(context, constraints)),
               if (widget.trailing != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
