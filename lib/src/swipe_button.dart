@@ -30,7 +30,7 @@ class SwipeButton extends StatefulWidget {
   final double elevationTrack;
 
   final VoidCallback? onSwipeStart;
-  final VoidCallback? onSwipe;
+  final Function(bool)? onSwipe;
   final VoidCallback? onSwipeEnd;
 
   final _SwipeButtonType _swipeButtonType;
@@ -148,12 +148,6 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
             clipBehavior: Clip.none,
             children: [
               _buildTrack(context, constraints),
-              Positioned(
-                  top: 0,
-                  bottom: 0,
-                  right: widget.connected ? 0 : null,
-                  left: widget.connected ? null : 0,
-                  child: _buildThumb(context, constraints)),
               if (widget.trailing != null)
                 Positioned(
                   top: 0,
@@ -165,6 +159,12 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
                     child: widget.trailing!,
                   ),
                 ),
+              Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: widget.connected ? 0 : null,
+                  left: widget.connected ? null : 0,
+                  child: _buildThumb(context, constraints)),
             ],
           );
         },
@@ -277,6 +277,9 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
     isRTL = widget.connected ? !isRTL : isRTL;
     final double offset = details.primaryDelta! / (width - widget.height);
 
+    // bool isConnect
+    // i want to get a bool value to be true if the horizontal drag is from left to the right
+    bool isConnect = details.primaryDelta != null && details.primaryDelta! > 0;
     switch (widget._swipeButtonType) {
       case _SwipeButtonType.swipe:
         if (!swiped && widget.enabled) {
@@ -289,7 +292,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
           if (swipeAnimationController.value == 1) {
             setState(() {
               swiped = true;
-              widget.onSwipe?.call();
+              widget.onSwipe?.call(isConnect);
             });
           }
         }
@@ -304,7 +307,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
           if (expandAnimationController.value == 1) {
             setState(() {
               swiped = true;
-              widget.onSwipe?.call();
+              widget.onSwipe?.call(isConnect);
             });
           }
         }
