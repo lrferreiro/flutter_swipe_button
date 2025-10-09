@@ -155,13 +155,13 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
                   left: widget.connected ? null : 0,
                   child: _buildThumb(context, constraints)),
               if (widget.trailing != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Positioned(
-                    top: 0,
-                    bottom: 0,
-                    right: widget.connected ? null : 0,
-                    left: widget.connected ? 0 : null,
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: widget.connected ? null : 0,
+                  left: widget.connected ? 0 : null,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: widget.trailing!,
                   ),
                 ),
