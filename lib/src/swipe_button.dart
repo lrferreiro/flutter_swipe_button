@@ -273,7 +273,8 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
 
   _onHorizontalDragUpdate(DragUpdateDetails details, double width) {
     final TextDirection currentDirection = Directionality.of(context);
-    final bool isRTL = currentDirection == TextDirection.rtl;
+    var isRTL = currentDirection == TextDirection.rtl;
+    isRTL = widget.connected ? !isRTL : isRTL;
     final double offset = details.primaryDelta! / (width - widget.height);
 
     switch (widget._swipeButtonType) {
