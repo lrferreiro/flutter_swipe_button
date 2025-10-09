@@ -80,10 +80,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 activeThumbColor: Colors.red,
                 activeTrackColor: Colors.grey.shade300,
-                onSwipe: () {
+                onSwipe: (isLeftToRight) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Swipped"),
+                    SnackBar(
+                      content: Text(
+                          "Swipped ${isLeftToRight ? 'left to right' : 'right to left'}"),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -111,10 +112,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.white,
                   ),
                 ),
-                onSwipe: () {
+                onSwipe: (isLeftToRight) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Swipped"),
+                    SnackBar(
+                      content: Text(
+                          "Swipped ${isLeftToRight ? 'left to right' : 'right to left'}"),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -142,10 +144,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onSwipe: () {
+                onSwipe: (isLeftToRight) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Swipped"),
+                    SnackBar(
+                      content: Text(
+                          "Swipped ${isLeftToRight ? 'left to right' : 'right to left'}"),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -167,10 +170,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.red,
                   ),
                 ),
-                onSwipe: () {
+                onSwipe: (isLeftToRight) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Swipped"),
+                    SnackBar(
+                      content: Text(
+                          "Swipped ${isLeftToRight ? 'left to right' : 'right to left'}"),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -193,10 +197,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.white,
                   ),
                 ),
-                onSwipe: () {
+                onSwipe: (isLeftToRight) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Swipped"),
+                    SnackBar(
+                      content: Text(
+                          "Swipped ${isLeftToRight ? 'left to right' : 'right to left'}"),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -216,10 +221,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.white,
                   ),
                 ),
-                onSwipe: () {
+                onSwipe: (isLeftToRight) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Swipped"),
+                    SnackBar(
+                      content: Text(
+                          "Swipped ${isLeftToRight ? 'left to right' : 'right to left'}"),
                       backgroundColor: Colors.green,
                     ),
                   );

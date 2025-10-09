@@ -277,9 +277,8 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
     isRTL = widget.connected ? !isRTL : isRTL;
     final double offset = details.primaryDelta! / (width - widget.height);
 
-    // bool isConnect
-    // i want to get a bool value to be true if the horizontal drag is from left to the right
-    bool isConnect = details.primaryDelta != null && details.primaryDelta! > 0;
+    bool isLeftToRight =
+        details.primaryDelta != null && details.primaryDelta! > 0;
     switch (widget._swipeButtonType) {
       case _SwipeButtonType.swipe:
         if (!swiped && widget.enabled) {
@@ -292,7 +291,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
           if (swipeAnimationController.value == 1) {
             setState(() {
               swiped = true;
-              widget.onSwipe?.call(isConnect);
+              widget.onSwipe?.call(isLeftToRight);
             });
           }
         }
@@ -307,7 +306,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
           if (expandAnimationController.value == 1) {
             setState(() {
               swiped = true;
-              widget.onSwipe?.call(isConnect);
+              widget.onSwipe?.call(isLeftToRight);
             });
           }
         }
