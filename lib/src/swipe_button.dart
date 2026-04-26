@@ -6,6 +6,8 @@ enum _SwipeButtonType {
 }
 
 class SwipeButton extends StatefulWidget {
+  final bool connected;
+  final Widget? trailing;
   final Widget child;
   final Widget? thumb;
 
@@ -28,7 +30,7 @@ class SwipeButton extends StatefulWidget {
   final double elevationTrack;
 
   final VoidCallback? onSwipeStart;
-  final VoidCallback? onSwipe;
+  final Function(bool)? onSwipe;
   final VoidCallback? onSwipeEnd;
 
   final _SwipeButtonType _swipeButtonType;
@@ -55,6 +57,8 @@ class SwipeButton extends StatefulWidget {
     this.onSwipe,
     this.onSwipeEnd,
     this.duration = const Duration(milliseconds: 250),
+    this.connected = false,
+    this.trailing,
   })  : assert(elevationThumb >= 0.0),
         assert(elevationTrack >= 0.0),
         _swipeButtonType = _SwipeButtonType.swipe;
@@ -79,6 +83,8 @@ class SwipeButton extends StatefulWidget {
     this.onSwipe,
     this.onSwipeEnd,
     this.duration = const Duration(milliseconds: 250),
+    this.connected = false,
+    this.trailing,
   })  : assert(elevationThumb >= 0.0),
         assert(elevationTrack >= 0.0),
         _swipeButtonType = _SwipeButtonType.expand;
@@ -142,7 +148,23 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
             clipBehavior: Clip.none,
             children: [
               _buildTrack(context, constraints),
-              _buildThumb(context, constraints),
+              if (widget.trailing != null)
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: widget.connected ? null : 0,
+                  left: widget.connected ? 0 : null,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: widget.trailing!,
+                  ),
+                ),
+              Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: widget.connected ? 0 : null,
+                  left: widget.connected ? null : 0,
+                  child: _buildThumb(context, constraints)),
             ],
           );
         },
@@ -193,7 +215,8 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
     final elevationThumb = widget.enabled ? widget.elevationThumb : 0.0;
 
     final TextDirection currentDirection = Directionality.of(context);
-    final bool isRTL = currentDirection == TextDirection.rtl;
+    var isRTL = currentDirection == TextDirection.rtl;
+    isRTL = widget.connected ? !isRTL : isRTL;
 
     return AnimatedBuilder(
       animation: swipeAnimationController,
@@ -250,9 +273,12 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
 
   _onHorizontalDragUpdate(DragUpdateDetails details, double width) {
     final TextDirection currentDirection = Directionality.of(context);
-    final bool isRTL = currentDirection == TextDirection.rtl;
+    var isRTL = currentDirection == TextDirection.rtl;
+    isRTL = widget.connected ? !isRTL : isRTL;
     final double offset = details.primaryDelta! / (width - widget.height);
 
+    bool isLeftToRight =
+        details.primaryDelta != null && details.primaryDelta! > 0;
     switch (widget._swipeButtonType) {
       case _SwipeButtonType.swipe:
         if (!swiped && widget.enabled) {
@@ -265,7 +291,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
           if (swipeAnimationController.value == 1) {
             setState(() {
               swiped = true;
-              widget.onSwipe?.call();
+              widget.onSwipe?.call(isLeftToRight);
             });
           }
         }
@@ -280,7 +306,7 @@ class _SwipeState extends State<SwipeButton> with TickerProviderStateMixin {
           if (expandAnimationController.value == 1) {
             setState(() {
               swiped = true;
-              widget.onSwipe?.call();
+              widget.onSwipe?.call(isLeftToRight);
             });
           }
         }
